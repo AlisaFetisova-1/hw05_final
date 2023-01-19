@@ -1,15 +1,17 @@
+import tempfile
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from posts.models import Group, Post, User, Comment, Follow
 from posts.forms import PostForm
-import tempfile
-from django.conf import settings
 
 
 User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
+
 
 class PostPagesTests(TestCase):
     @classmethod
@@ -205,7 +207,8 @@ class CommentTest(TestCase):
                     }
         for value, expected in comments.items():
             self.assertEqual(comments[value], expected)
-        self.assertTrue(response.context['form'], 'форма получена')
+            self.assertTrue(response.context['form'], 'форма получена')
+
 
 class FollowViewsTest(TestCase):
     @classmethod
