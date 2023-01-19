@@ -1,0 +1,17 @@
+{% with request.resolver_match.view_name as view_name %}
+<article>
+  <ul>
+    <li>
+      Автор: {{ post.author }}
+      {% if view_name != 'posts:profile' %}
+        <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
+      {% endif %}
+    </li>
+    <li>
+      Дата публикации: {{ post.created|date:"d E Y" }}
+    </li>
+  </ul>
+  <p>{{ post.text }}</p>
+  <a href="{% url 'posts:post_detail' post.pk %}">подробная информация </a>
+</article>
+{% endwith %}
