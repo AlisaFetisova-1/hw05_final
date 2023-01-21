@@ -22,4 +22,4 @@ urlpatterns = [path('', views.index, name="index"),
                     views.profile_follow, name='profile_follow'),
                path('profile/<str:username>/unfollow/',
                     views.profile_unfollow, name="profile_unfollow"),
-          ]
+               ]
