@@ -99,7 +99,7 @@ def post_edit(request, post_id):
         request.POST or None,
         files=request.FILES or None,
         instance=post
-        )
+    )
     return render(request, 'posts/create_post.html', context)
 
 
@@ -120,7 +120,7 @@ def follow_index(request):
     template = 'posts/posts_follow.html'
     posts_list = Post.objects.filter(author__following__user=request.user)
     page_obj = get_page_context(posts_list, request)
-    context = {'page_obj': page_obj,}
+    context = {'page_obj': page_obj}
     return render(request, template, context)
 
 
