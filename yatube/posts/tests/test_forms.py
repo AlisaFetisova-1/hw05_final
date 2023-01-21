@@ -16,7 +16,7 @@ TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 # Для сохранения media-файлов в тестах будет использоваться
 # временная папка TEMP_MEDIA_ROOT, а потом мы ее удалим
-@override_settings (MEDIA_ROOT=TEMP_MEDIA_ROOT)
+@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class PostFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -35,7 +35,7 @@ class PostFormTests(TestCase):
         super().tearDownClass()
         # Метод shutil.rmtree удаляет директорию и всё её содержимое
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
-    
+
     def setUp(self):
         self.guest_client = Client()
         self.authorized_client = Client()
@@ -57,7 +57,7 @@ class PostFormTests(TestCase):
         posts_count = Post.objects.count()
         form_data = {'text': 'Текст записанный в форму',
                      'group': self.group.id,
-                     'image':self.uploaded
+                     'image': self.uploaded
                      }
         response = self.authorized_client.post(reverse('posts:post_create'),
                                                data=form_data,
@@ -71,13 +71,12 @@ class PostFormTests(TestCase):
     def test_edit_post(self):
         """ Валидная форма изменяет запись в Пост"""
         post = Post.objects.create(text='Тестовый текст',
-                                    author=self.user,
-                                    group=self.group,
-                                    )
+                                   author=self.user,
+                                   group=self.group)
         old_text = post
         group2 = Group.objects.create(title='Тестовая группа2',
-                                        slug='tests-group',
-                                        description='Описание')
+                                      slug='tests-group',
+                                      description='Описание')
         form_data = {'text': 'Текст записанный в форму',
                      'group': group2.id}
         posts_count = Post.objects.count()
@@ -119,7 +118,7 @@ class CommentFormTest(TestCase):
             reverse('posts:add_comment',
                     kwargs={'post_id': self.post.id}),
             data=form_data, follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.OK) 
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(Comment.objects.count(),
                          comment_count + 1,
                          )
@@ -135,7 +134,7 @@ class CommentFormTest(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertNotEqual(Comment.objects.count(),
                             posts_count + 1,
-                           )
+                            )
 
     def test_comment_null(self):
         '''Запрет пустого комментария'''

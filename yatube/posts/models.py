@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from core.models import CreatedModel
-from django.conf import settings
 
 
 User = get_user_model()
@@ -29,18 +28,18 @@ class Post(models.Model):
         db_index=True
     )
     author = models.ForeignKey(
-        User, 
+        User,
         on_delete=models.CASCADE,
         verbose_name='Автор',
         related_name='posts'
-        )
+    )
     group = models.ForeignKey(Group, blank=True,
                               null=True,
                               on_delete=models.SET_NULL,
                               related_name='posts',
                               verbose_name='Группа',
                               help_text='Выберите группу'
-                            )
+    )
     image = models.ImageField(
         'Картинка',
         upload_to='posts/',
@@ -54,6 +53,7 @@ class Post(models.Model):
         ordering = ('-pub_date', 'author')
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
+
 
 class Comment(CreatedModel):
 
@@ -74,6 +74,7 @@ class Comment(CreatedModel):
         ordering = ('-created',)
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
 
 class Follow(models.Model):
     user = models.ForeignKey(User, related_name='follower',

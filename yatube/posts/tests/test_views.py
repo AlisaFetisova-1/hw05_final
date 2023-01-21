@@ -15,7 +15,7 @@ User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 
-@override_settings (MEDIA_ROOT=TEMP_MEDIA_ROOT)
+@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class PostPagesTests(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -154,6 +154,7 @@ class PostPagesTests(TestCase):
                     'Количество постов на первой странице не равно десяти'
                 )
 
+
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class ViewsTest(TestCase):
     @classmethod
@@ -233,7 +234,7 @@ class FollowViewsTest(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(FollowViewsTest.user)
         self.authorized_client2 = Client()
-        self.authorized_client2.force_login( FollowViewsTest.user2)
+        self.authorized_client2.force_login(FollowViewsTest.user2)
 
     def test_user_follower_authors(self):
         '''Посты доступны подписчику'''

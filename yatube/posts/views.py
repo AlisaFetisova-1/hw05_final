@@ -2,12 +2,11 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Group, Post, Follow
-from .forms import  CommentForm, PostForm
+from .forms import CommentForm, PostForm
 from .utils import get_page_context
 
 User = get_user_model()
 NUMBER_OF_OBJECTS = 10
-
 
 
 def index(request):
@@ -113,17 +112,15 @@ def add_comment(request, post_id):
         comment.post = post
         comment.author = request.user
         comment.save()
-    return redirect('posts:post_detail', post_id=post_id) 
+    return redirect('posts:post_detail', post_id=post_id)
 
 
 @login_required
 def follow_index(request):
     template = 'posts/posts_follow.html'
     posts_list = Post.objects.filter(author__following__user=request.user)
-    page_obj  = get_page_context(posts_list, request)
-    context = {
-        'page_obj': page_obj,
-    }
+    page_obj = get_page_context(posts_list, request)
+    context = {'page_obj': page_obj,}
     return render(request, template, context)
 
 

@@ -2,8 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from http import HTTPStatus
 
-from posts.models import Group, Post, Follow
-from django.urls import reverse
+from posts.models import Group, Post
 
 User = get_user_model()
 
@@ -71,6 +70,5 @@ class StaticURLTests(TestCase):
         response = self.guest_client.get('/test-no-popular', follow=True)
         error_name = 'Ошибка: unexisting_url не работает'
         self.assertEqual(response.status_code,
-                          HTTPStatus.NOT_FOUND,
-                          error_name)
-
+                         HTTPStatus.NOT_FOUND,
+                         error_name)
