@@ -12,17 +12,22 @@ NUMBER_OF_OBJECTS = 10
 
 def index(request):
     posts = Post.objects.select_related('group', 'author')
-    context = get_page_context(posts, request)
+    page_obj = get_page_context(posts, request)
+    context = {
+        'page_obj': page_obj,
+    }
     return render(request, 'posts/index.html', context)
 
 
 def group_posts(request, slug):
     template = "posts/group_list.html"
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.all()
-    context = {'group': group,
-               }
-    context.update(get_page_context(posts, request))
+    post_list = group.posts.all()
+    page_obj = get_page_context(post_list, request)
+    context = {
+        'group': group,
+        'page_obj': page_obj,
+    }
     return render(request, template, context)
 
 
@@ -31,16 +36,19 @@ def profile(request, username):
     """на ней будет отображаться информация об авторе и его посты"""
     """код запроса к модели и создание словаря контекста"""
     author = get_object_or_404(User, username=username)
-    posts = author.posts.all()
-    following = (request.user.is_authenticated
-                 and Follow.objects.filter(
-                     user=request.user,
-                     author=author).exists())
+    post_list = author.posts.all()
+    page_obj = get_page_context(post_list, request)
+    following = False
+    if request.user.is_authenticated:
+        following = Follow.objects.filter(
+            user=request.user, author=author
+        ).exists()
     context = {
         'author': author,
-        'following': following
+        'page_obj': page_obj,
+        'username': username,
+        'following': following,
     }
-    context.update(get_page_context(posts, request))
     return render(request, 'posts/profile.html', context)
 
 
@@ -112,8 +120,10 @@ def add_comment(request, post_id):
 def follow_index(request):
     template = 'posts/posts_follow.html'
     posts_list = Post.objects.filter(author__following__user=request.user)
-    page = get_page_context(posts_list, request)
-    context = {"page_obj": page}
+    page_obj  = get_page_context(posts_list, request)
+    context = {
+        'page_obj': page_obj,
+    }
     return render(request, template, context)
 
 
