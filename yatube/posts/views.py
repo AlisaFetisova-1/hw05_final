@@ -33,7 +33,6 @@ def group_posts(request, slug):
 def profile(request, username):
     """Страница профайла пользователя"""
     """на ней будет отображаться информация об авторе и его посты"""
-    """код запроса к модели и создание словаря контекста"""
     author = get_object_or_404(User, username=username)
     post_list = author.posts.all()
     page_obj = get_page_context(post_list, request)
