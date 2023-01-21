@@ -1,7 +1,9 @@
 import tempfile
+import shutil
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -13,6 +15,7 @@ User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 
+@override_settings (MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class PostPagesTests(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -30,7 +33,14 @@ class PostPagesTests(TestCase):
             text='Тестовый пост',
         )
 
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        # Метод shutil.rmtree удаляет директорию и всё её содержимое
+        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
+
     def setUp(self):
+        cache.clear()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
@@ -221,9 +231,9 @@ class FollowViewsTest(TestCase):
     def setUp(self):
         self.guest_client = Client()
         self.authorized_client = Client()
-        self.authorized_client.force_login(self.user)
+        self.authorized_client.force_login(FollowViewsTest.user)
         self.authorized_client2 = Client()
-        self.authorized_client2.force_login(self.user2)
+        self.authorized_client2.force_login( FollowViewsTest.user2)
 
     def test_user_follower_authors(self):
         '''Посты доступны подписчику'''

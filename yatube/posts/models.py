@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from core.models import CreatedModel
+from django.conf import settings
 
 
 User = get_user_model()
@@ -53,7 +55,7 @@ class Post(models.Model):
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
 
-class Comment(models.Model):
+class Comment(CreatedModel):
 
     post = models.ForeignKey('Post',
                              on_delete=models.CASCADE,
@@ -69,6 +71,7 @@ class Comment(models.Model):
                             help_text='Напишите комментарий')
 
     class Meta:
+        ordering = ('-created',)
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
@@ -79,7 +82,6 @@ class Follow(models.Model):
                                on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('-author',)
         verbose_name = 'Лента автора'
         verbose_name_plural = 'Лента авторов'
         constraints = [models.UniqueConstraint(

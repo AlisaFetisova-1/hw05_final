@@ -1,11 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Group, Post, User, Follow
+from .models import Group, Post, Follow
 from .forms import  CommentForm, PostForm
 from .utils import get_page_context
 
-
+User = get_user_model()
 NUMBER_OF_OBJECTS = 10
+
 
 
 def index(request):

@@ -4,7 +4,7 @@
     <li>
       Автор: {{ post.author }}
       {% if view_name != 'posts:profile' %}
-        <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
+        <a href="">все посты пользователя</a>
       {% endif %}
     </li>
     <li>
@@ -12,6 +12,6 @@
     </li>
   </ul>
   <p>{{ post.text }}</p>
-  <a href="{% url 'posts:post_detail' post.pk %}">подробная информация </a>
+  <a href="">подробная информация </a>
 </article>
 {% endwith %}
