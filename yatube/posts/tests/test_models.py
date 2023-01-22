@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-
+from yatube.settings import NUMBER
 from ..models import Group, Post
 
 User = get_user_model()
-NUMBER = 15
 
 
 class PostModelTest(TestCase):

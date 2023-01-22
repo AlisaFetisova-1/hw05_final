@@ -47,6 +47,7 @@ class StaticURLTests(TestCase):
     def test_urls_authorized_client(self):
         """Доступ авторизованного пользователя"""
         pages: tuple = ('/create/',
+                        '/follow/',
                         f'/posts/{self.post.id}/edit/')
         for page in pages:
             response = self.guest_client.get(page)

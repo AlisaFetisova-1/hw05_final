@@ -154,40 +154,7 @@ class PostPagesTests(TestCase):
                     'Количество постов на первой странице не равно десяти'
                 )
 
-
-@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
-class ViewsTest(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.user = User.objects.create_user(username='auth1')
-        cls.user2 = User.objects.create_user(username='auth2')
-
-    def setUp(self):
-        self.small_gif = (
-            b'\x47\x49\x46\x38\x39\x61\x02\x00'
-            b'\x01\x00\x80\x00\x00\x00\x00\x00'
-            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-            b'\x0A\x00\x3B'
-        )
-        self.uploaded = SimpleUploadedFile(
-            name='small.gif',
-            content=self.small_gif,
-            content_type='image/gif'
-        )
-        self.guest_client = Client()
-        self.authorized_client = Client()
-        self.authorized_client.force_login(self.user)
-        self.group = Group.objects.create(title='Тестовая группа',
-                                          slug='test_group')
-        self.post = Post.objects.create(text='Тестовый текст',
-                                        group=self.group,
-                                        author=self.user,
-                                        image=self.uploaded)
-
-
+#class ViewsTest(TestCase): была старая версия, переделала этот класс и забыла удалить 
 class CommentTest(TestCase):
     @classmethod
     def setUpClass(cls):

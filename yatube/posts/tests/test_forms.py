@@ -1,6 +1,7 @@
 import shutil
 import tempfile
 from http import HTTPStatus
+from django.core.cache import cache
 from django.conf import settings
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
@@ -14,8 +15,6 @@ User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 
-# Для сохранения media-файлов в тестах будет использоваться
-# временная папка TEMP_MEDIA_ROOT, а потом мы ее удалим
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class PostFormTests(TestCase):
     @classmethod
@@ -94,7 +93,19 @@ class PostFormTests(TestCase):
 
 
 class CommentFormTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # Создаем тестовую группу
+        cls.group = Group.objects.create(
+            title="Тестовая группа",
+            slug="test_group",
+            description="Тестовое описание",
+        )
+        # Создаем пользователя
+        cls.user = User.objects.create_user(username="Tester")
     def setUp(self):
+        cache.clear()
         self.guest_client = Client()
         self.user = User.objects.create_user(username='auth')
         self.authorized_client = Client()
