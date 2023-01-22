@@ -104,6 +104,7 @@ class CommentFormTest(TestCase):
         )
         # Создаем пользователя
         cls.user = User.objects.create_user(username="Tester")
+
     def setUp(self):
         cache.clear()
         self.guest_client = Client()

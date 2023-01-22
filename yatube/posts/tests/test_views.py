@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
-from django.core.files.uploadedfile import SimpleUploadedFile
 from posts.models import Group, Post, User, Comment, Follow
 from posts.forms import PostForm
 
@@ -154,7 +153,7 @@ class PostPagesTests(TestCase):
                     'Количество постов на первой странице не равно десяти'
                 )
 
-#class ViewsTest(TestCase): была старая версия, переделала этот класс и забыла удалить 
+
 class CommentTest(TestCase):
     @classmethod
     def setUpClass(cls):
