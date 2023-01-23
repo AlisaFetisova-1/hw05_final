@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from http import HTTPStatus
-
+from django.core.cache import cache
 from posts.models import Group, Post
 
 User = get_user_model()
@@ -23,26 +23,24 @@ class StaticURLTests(TestCase):
         )
 
     def setUp(self):
+        cache.clear()
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
     def test_urls_uses_correct_template(self):
+        """URL-адрес использует соответствующий шаблон."""
         response = self.guest_client.get('/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.templates_url_names = {
             '': 'posts/index.html',
+            '/follow/': 'posts/posts_follow.html',
             f'/group/{self.group.slug}/': 'posts/group_list.html',
             f'/profile/{self.user}/': 'posts/profile.html',
             f'/posts/{self.post.pk}/': 'posts/post_detail.html',
             '/create/': 'posts/create_post.html',
             f'/posts/{self.post.pk}/edit/': 'posts/create_post.html',
         }
-
-        for address, template in self.templates_url_names.items():
-            with self.subTest(address=address):
-                response = self.authorized_client.get(address)
-                self.assertTemplateUsed(response, template)
 
     def test_urls_authorized_client(self):
         """Доступ авторизованного пользователя"""

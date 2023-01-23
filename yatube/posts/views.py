@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect, render, get_object_or_404
+from django.views.decorators.cache import cache_page
 from django.contrib.auth.decorators import login_required
 from .models import Group, Post, Follow
 from .forms import CommentForm, PostForm
@@ -9,6 +10,7 @@ User = get_user_model()
 NUMBER_OF_OBJECTS = 10
 
 
+@cache_page(60 * 15)
 def index(request):
     posts = Post.objects.select_related('group', 'author')
     page_obj = get_page_context(posts, request)

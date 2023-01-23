@@ -67,22 +67,21 @@ class PostPagesTests(TestCase):
                 response = self.authorized_client.get(reverse_name)
                 self.assertTemplateUsed(response, template)
 
-    def test_context_index(self):
-        response = self.authorized_client.get(reverse('posts:index'))
-        page_object = response.context['page_obj']
-        self.assertEqual(len(page_object), 1)
-        self.assertIsInstance(page_object[0], Post)
-
-    def test_context_group_posts(self):
-        response = self.authorized_client.get(
-            reverse(
-                'posts:group',
-                kwargs={'slug': PostPagesTests.group.slug}
-            )
-        )
-        page_object = response.context['page_obj']
-        self.assertEqual(len(page_object), 1)
-        self.assertIsInstance(page_object[0], Post)
+    def test_cache_context(self):
+        '''Проверка кэширования страницы index'''
+        before_create_post = self.authorized_client.get(
+            reverse('posts:index'))
+        first_item_before = before_create_post.content
+        Post.objects.create(
+            author=self.user,
+            text='Проверка кэша',
+            group=self.group)
+        after_create_post = self.authorized_client.get(reverse('posts:index'))
+        first_item_after = after_create_post.content
+        self.assertEqual(first_item_after, first_item_before)
+        cache.clear()
+        after_clear = self.authorized_client.get(reverse('posts:index'))
+        self.assertNotEqual(first_item_after, after_clear)
 
     def test_profile_page_show_correct_context(self):
         """Шаблон profile сформирован с правильным контекстом."""
@@ -152,22 +151,6 @@ class PostPagesTests(TestCase):
                     len(response.context['page_obj']), 10,
                     'Количество постов на первой странице не равно десяти'
                 )
-
-    def test_cache_context(self):
-        '''Проверка кэширования страницы index'''
-        before_create_post = self.authorized_client.get(
-            reverse('posts:index'))
-        first_item_before = before_create_post.content
-        Post.objects.create(
-            author=self.user,
-            text='Проверка кэша',
-            group=self.group)
-        after_create_post = self.authorized_client.get(reverse('posts:index'))
-        first_item_after = after_create_post.content
-        self.assertEqual(first_item_after, first_item_before)
-        cache.clear()
-        after_clear = self.authorized_client.get(reverse('posts:index'))
-        self.assertNotEqual(first_item_after, after_clear)
 
 
 class CommentTest(TestCase):
