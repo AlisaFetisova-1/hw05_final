@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from core.models import CreatedModel
-
+from yatube.settings import NUMBER
 
 User = get_user_model()
 
@@ -47,7 +47,7 @@ class Post(models.Model):
     )
 
     def __str__(self) -> str:
-        return self.text[:15]
+        return self.text[:NUMBER]
 
     class Meta:
         ordering = ('-pub_date', 'author')
