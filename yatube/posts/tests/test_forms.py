@@ -105,22 +105,20 @@ class CommentFormTest(TestCase):
         cls.user = User.objects.create_user(username="Tester")
         cls.user = User.objects.create_user(username='auth')
         cls.group = Group.objects.create(title='Тестовая группа',
-                                          slug='test-group',
-                                          description='Описание')
+                                         slug='test-group',
+                                         description='Описание')
         cls.post = Post.objects.create(text='Тестовый текст',
-                                        author=cls.user,
-                                        group=cls.group)
+                                       author=cls.user,
+                                       group=cls.group)
         cls.comment = Comment.objects.create(post_id=cls.post.id,
-                                              author=cls.user,
-                                              text='Тестовый коммент')
-        
+                                             author=cls.user,
+                                             text='Тестовый коммент')
 
     def setUp(self):
         cache.clear()
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
-        
 
     def test_create_comment(self):
         '''Проверка создания комментария'''

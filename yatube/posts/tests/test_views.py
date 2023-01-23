@@ -152,6 +152,7 @@ class PostPagesTests(TestCase):
                     len(response.context['page_obj']), 10,
                     'Количество постов на первой странице не равно десяти'
                 )
+
     def test_cache_context(self):
         '''Проверка кэширования страницы index'''
         before_create_post = self.authorized_client.get(
@@ -167,6 +168,7 @@ class PostPagesTests(TestCase):
         cache.clear()
         after_clear = self.authorized_client.get(reverse('posts:index'))
         self.assertNotEqual(first_item_after, after_clear)
+
 
 class CommentTest(TestCase):
     @classmethod
