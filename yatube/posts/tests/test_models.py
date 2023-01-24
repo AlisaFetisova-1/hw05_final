@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from yatube.settings import NUMBER
+from django.conf import settings
 from ..models import Group, Post
 
 User = get_user_model()
@@ -24,7 +24,7 @@ class PostModelTest(TestCase):
     def test_models_have_correct_object_names(self):
         """Проверяем, что у моделей корректно работает __str__"""
         post = PostModelTest.post
-        expected_object_name_post = post.text[:NUMBER]
+        expected_object_name_post = post.text[:settings.NUMBER]
         group = PostModelTest.group
         expected_object_name_group = group.title
         test_dict = {
